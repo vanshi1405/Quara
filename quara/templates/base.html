@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Quora Clone</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.1/milligram.min.css">
+    <style>
+        body { margin: 20px; }
+        .nav { margin-bottom: 20px; }
+        .nav a { margin-right: 15px; }
+        .messages { color: green; }
+        .errorlist { color: red; }
+    </style>
+</head>
+<body>
+    <div class="nav">
+        <a href="{% url 'home' %}">Home</a>
+        {% if user.is_authenticated %}
+            <a href="{% url 'post_question' %}">Post Question</a>
+            <a href="{% url 'logout' %}">Logout</a>
+            <span>Welcome, {{ user.username }}!</span>
+        {% else %}
+            <a href="{% url 'login' %}">Login</a>
+            <a href="{% url 'signup' %}">Signup</a>
+        {% endif %}
+    </div>
+
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% block content %}
+    {% endblock %}
+</body>
+</html>

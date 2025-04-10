@@ -16,15 +16,14 @@ class QuestionForm(forms.ModelForm):
 class AnswerForm(forms.ModelForm):
     class Meta:
         model = Answer
-        fields = ['content']
+        fields = ['description']
 
 class SignUpForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ['username','first_name','last_name']
+        fields = ['username','first_name','last_name','password']
 
 
-class LoginForm(forms.ModelForm):
-    class Meta:
-        model = User
-        fields = ['username','password']
+class LoginForm(forms.Form):
+    username = forms.CharField(max_length=150, label="Username")
+    password = forms.CharField(widget=forms.PasswordInput, label="Password")

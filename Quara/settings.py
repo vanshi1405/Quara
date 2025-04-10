@@ -9,18 +9,26 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
-
+import os
+from configparser import RawConfigParser
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
+CONFIG_FILE = os.path.join(BASE_DIR, 'Quara/config.ini')
+config = RawConfigParser()
+config.read(CONFIG_FILE)
+DEFAULT_DB_NAME: str = config.get(section='database', option='NAME')
+DEFAULT_DB_HOST: str = config.get(section='database', option='HOST')
+DEFAULT_DB_USER: str = config.get(section='database', option='USER')
+DEFAULT_DB_PASSWORD: str = config.get(section='database', option='PASSWORD')
+DEFAULT_DB_PORT: str = config.get(section='database', option='PORT')
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-)f8^))b*+ly*^7qw391yyo06cy_e8sgjs+h4j^j8*l-$)r44r&'
+SECRET_KEY = config.get(section='main', option='SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -37,7 +45,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',
     'quara'
 ]
 
@@ -56,7 +63,7 @@ ROOT_URLCONF = 'Quara.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -76,17 +83,13 @@ WSGI_APPLICATION = 'Quara.wsgi.application'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': BASE_DIR / 'db.sqlite3',
-    # }
 'default': {
         'ENGINE': 'django.db.backends.mysql',  # or 'django.db.backends.postgresql' etc.
-        'NAME': 'quara',
-        'USER': 'root',
-        'PASSWORD': 'Ankur@1234',
-        'HOST': 'localhost',  # or your database host
-        'PORT': '3306',  # default MySQL port
+        'NAME': DEFAULT_DB_NAME,
+        'USER': DEFAULT_DB_USER,
+        'PASSWORD': DEFAULT_DB_PASSWORD,
+        'HOST': DEFAULT_DB_HOST,  # or your database host
+        'PORT': DEFAULT_DB_PORT,  # default MySQL port
     }
 }
 
@@ -131,3 +134,7 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'login'
