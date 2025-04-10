@@ -1,5 +1,7 @@
 .idea/
 __pycache__/
+**/__pycache__/
+
 bin/
 .DS_Store
 Quara/config.ini
